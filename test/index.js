@@ -7,5 +7,6 @@ require('./hooks/get.spec');
 require('./hooks/post.spec');
 require('./branches/get.spec');
 require('./tags/get.spec');
+require('./tags/post.spec');
 require('./users/get.spec');
 require('./settings/get.spec');
