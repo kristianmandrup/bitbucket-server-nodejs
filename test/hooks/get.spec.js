@@ -1,6 +1,6 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var BitbucketClient = require('../../index.js').Client;
+var BitbucketClient = require('../../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 
@@ -26,9 +26,9 @@ describe('Hooks', function () {
     bitbucketClient.hooks.get('PRJ', 'my-repo')
       .then(function (hooks) {
         assert.equal(hooks.size, 1);
-        assert.deepEqual(hooks.values[ 0 ], expected.values[ 0 ]);
+        assert.deepEqual(hooks.values[0], expected.values[0]);
         assert.equal(
-          requestGet.getCall(0).args[ 0 ].uri,
+          requestGet.getCall(0).args[0].uri,
           'http://localhost/projects/PRJ/repos/my-repo/settings/hooks?limit=1000'
         );
 
@@ -47,7 +47,7 @@ describe('Hooks', function () {
       .then(function (hook) {
         assert.deepEqual(hook.details, expected.details);
         assert.equal(
-          requestGet.getCall(0).args[ 0 ].uri,
+          requestGet.getCall(0).args[0].uri,
           'http://localhost/projects/PRJ/repos/my-repo/settings/hooks/' + hookKey
         );
 
@@ -64,7 +64,7 @@ describe('Hooks', function () {
     bitbucketClient.hooks.getPreReceive('PRJ', 'my-repo')
       .then(function (hooks) {
         assert.equal(hooks.size, 1);
-        assert.deepEqual(hooks.values[ 0 ], expected.values[ 0 ]);
+        assert.deepEqual(hooks.values[0], expected.values[0]);
 
         done();
       });
@@ -79,7 +79,7 @@ describe('Hooks', function () {
     bitbucketClient.hooks.getPostReceive('PRJ', 'my-repo')
       .then(function (hooks) {
         assert.equal(hooks.size, 1);
-        assert.deepEqual(hooks.values[ 0 ], expected.values[ 0 ]);
+        assert.deepEqual(hooks.values[0], expected.values[0]);
 
         done();
       });

@@ -1,6 +1,6 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var BitbucketClient = require('../../index.js').Client;
+var BitbucketClient = require('../../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 
@@ -26,12 +26,11 @@ describe('Projects', function () {
     bitbucketClient.projects.get()
       .then(function (projects) {
         assert.equal(projects.size, 1);
-        assert.deepEqual(projects.values[ 0 ], expected.values[ 0 ]);
-        assert.equal(requestGet.getCall(0).args[ 0 ].uri, 'http://localhost/projects?limit=1000');
-        assert.equal(requestGet.getCall(0).args[ 0 ].oauth, oauth);
+        assert.deepEqual(projects.values[0], expected.values[0]);
+        assert.equal(requestGet.getCall(0).args[0].uri, 'http://localhost/projects?limit=1000');
+        assert.equal(requestGet.getCall(0).args[0].oauth, oauth);
 
         done();
       });
   });
 });
-

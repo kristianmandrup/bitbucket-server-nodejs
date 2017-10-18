@@ -1,6 +1,6 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var BitbucketClient = require('../../index.js').Client;
+var BitbucketClient = require('../../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 
@@ -28,12 +28,12 @@ describe('Settings', function () {
         assert.deepEqual(settings, expected);
 
         assert.equal(
-          requestGet.getCall(0).args[ 0 ].uri,
+          requestGet.getCall(0).args[0].uri,
           'http://localhost/users/username/settings'
         );
 
         assert.equal(
-          requestGet.getCall(0).args[ 0 ].auth,
+          requestGet.getCall(0).args[0].auth,
           auth
         );
 
@@ -41,4 +41,3 @@ describe('Settings', function () {
       });
   });
 });
-

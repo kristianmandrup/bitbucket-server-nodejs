@@ -1,0 +1,9 @@
+# Changelog
+
+## 2.12.0
+
+By [@kristianmandrup](github.com/kristianmandrup)
+
+- Converted all REST client resources to ES6 classes
+- Added Logger base class to enable logging
+- Added factory methods for creating class instances

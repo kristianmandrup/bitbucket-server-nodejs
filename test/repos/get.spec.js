@@ -1,6 +1,6 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var BitbucketClient = require('../../index.js').Client;
+var BitbucketClient = require('../../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 
@@ -9,7 +9,9 @@ describe('Repos', function () {
   var oauth = require('../mocks/oauth');
 
   beforeEach(function () {
-    bitbucketClient = new BitbucketClient('http://localhost/', oauth);
+    bitbucketClient = new BitbucketClient('http://localhost/', oauth, {
+      logging: true
+    });
     requestGet = sinon.stub(request, 'get');
   });
 
@@ -30,16 +32,16 @@ describe('Repos', function () {
     bitbucketClient.repos.get('PRJ')
       .then(function (repos) {
         assert.equal(repos.size, 1);
-        assert.deepEqual(repos.values[ 0 ], expected.values[ 0 ]);
-        assert.equal(requestGet.getCall(0).args[ 0 ].uri, 'http://localhost/projects/PRJ/repos?limit=1000');
+        assert.deepEqual(repos.values[0], expected.values[0]);
+        assert.equal(requestGet.getCall(0).args[0].uri, 'http://localhost/projects/PRJ/repos?limit=1000');
 
         // Test that getCombined proxies to normal get, when project key given.
         return bitbucketClient.repos.getCombined('PRJ');
       })
       .then(function (repos) {
         assert.equal(repos.size, 1);
-        assert.deepEqual(repos.values[ 0 ], expected.values[ 0 ]);
-        assert.equal(requestGet.getCall(1).args[ 0 ].uri, 'http://localhost/projects/PRJ/repos?limit=1000');
+        assert.deepEqual(repos.values[0], expected.values[0]);
+        assert.equal(requestGet.getCall(1).args[0].uri, 'http://localhost/projects/PRJ/repos?limit=1000');
 
         done();
       });
@@ -58,9 +60,9 @@ describe('Repos', function () {
     // Test repos.get API.
     bitbucketClient.repos.getCombined()
       .then(function (repos) {
-        assert.deepEqual(repos.values[ 0 ], expectedRepos.values[ 0 ]);
-        assert.equal(requestGet.getCall(0).args[ 0 ].uri, 'http://localhost/projects?limit=1000');
-        assert.equal(requestGet.getCall(1).args[ 0 ].uri, 'http://localhost/projects/PRJ/repos?limit=1000');
+        assert.deepEqual(repos.values[0], expectedRepos.values[0]);
+        assert.equal(requestGet.getCall(0).args[0].uri, 'http://localhost/projects?limit=1000');
+        assert.equal(requestGet.getCall(1).args[0].uri, 'http://localhost/projects/PRJ/repos?limit=1000');
 
         done();
       });
@@ -107,7 +109,7 @@ describe('Repos', function () {
     bitbucketClient.repos.getRepo('PRJ', 'my-repo')
       .then(function (repos) {
         assert.deepEqual(repos, expected);
-        assert.equal(requestGet.getCall(0).args[ 0 ].uri, 'http://localhost/projects/PRJ/repos/my-repo');
+        assert.equal(requestGet.getCall(0).args[0].uri, 'http://localhost/projects/PRJ/repos/my-repo');
 
         done();
       });
@@ -122,20 +124,24 @@ describe('Repos', function () {
     bitbucketClient.repos.browse('PRJ', 'my-repo')
       .then(function (browse) {
         assert.deepEqual(browse, expected);
-        assert.equal(requestGet.getCall(0).args[ 0 ].uri, 'http://localhost/projects/PRJ/repos/my-repo/browse?limit=1000');
+        assert.equal(requestGet.getCall(0).args[0].uri, 'http://localhost/projects/PRJ/repos/my-repo/browse?limit=1000');
 
-        return bitbucketClient.repos.browse('PRJ', 'my-repo', { path: '/my-path/foo.html' });
+        return bitbucketClient.repos.browse('PRJ', 'my-repo', {
+          path: '/my-path/foo.html'
+        });
       })
       .then(function (browse) {
         var toCall = 'http://localhost/projects/PRJ/repos/my-repo/browse/my-path/foo.html?limit=1000';
-        assert.equal(requestGet.getCall(1).args[ 0 ].uri, toCall);
+        assert.equal(requestGet.getCall(1).args[0].uri, toCall);
 
         // test that it will add the first slash in path if missing
-        return bitbucketClient.repos.browse('PRJ', 'my-repo', { path: 'my-path/foo.html' });
+        return bitbucketClient.repos.browse('PRJ', 'my-repo', {
+          path: 'my-path/foo.html'
+        });
       })
       .then(function (browse) {
         var toCall = 'http://localhost/projects/PRJ/repos/my-repo/browse/my-path/foo.html?limit=1000';
-        assert.equal(requestGet.getCall(2).args[ 0 ].uri, toCall);
+        assert.equal(requestGet.getCall(2).args[0].uri, toCall);
 
         done();
       });

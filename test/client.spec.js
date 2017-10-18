@@ -1,6 +1,6 @@
 var assert = require('chai').assert;
 var sinon = require('sinon');
-var BitbucketClient = require('../index.js').Client;
+var BitbucketClient = require('../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 var _ = require('lodash');
@@ -91,7 +91,7 @@ describe('Client', function () {
   });
 
   describe('should complain about missing oauth attributes when auth.type === oauth', function () {
-    var attributes = [ 'consumer_key', 'consumer_secret', 'signature_method', 'token', 'token_secret' ];
+    var attributes = ['consumer_key', 'consumer_secret', 'signature_method', 'token', 'token_secret'];
 
     _.each(attributes, function (attribute) {
       it('missing oauth attribute ' + attribute, function (done) {
@@ -174,10 +174,10 @@ describe('Client', function () {
 
       client.get('repos')
         .then(function () {
-          assert.equal(requestGet.getCall(0).args[ 0 ].uri,
+          assert.equal(requestGet.getCall(0).args[0].uri,
             'http://localhost/repos');
 
-          assert.equal(requestGet.getCall(0).args[ 0 ].auth,
+          assert.equal(requestGet.getCall(0).args[0].auth,
             auth);
 
           done();
@@ -190,10 +190,10 @@ describe('Client', function () {
 
       client.get('repos')
         .then(function () {
-          assert.equal(requestGet.getCall(0).args[ 0 ].uri,
+          assert.equal(requestGet.getCall(0).args[0].uri,
             'http://localhost/repos');
 
-          assert.equal(requestGet.getCall(0).args[ 0 ].oauth,
+          assert.equal(requestGet.getCall(0).args[0].oauth,
             oauth);
 
           done();
@@ -218,10 +218,10 @@ describe('Client', function () {
 
       client.put('repos')
         .then(function () {
-          assert.equal(requestPost.getCall(0).args[ 0 ].uri,
+          assert.equal(requestPost.getCall(0).args[0].uri,
             'http://localhost/repos');
 
-          assert.equal(requestPost.getCall(0).args[ 0 ].auth,
+          assert.equal(requestPost.getCall(0).args[0].auth,
             auth);
 
           done();
@@ -233,10 +233,10 @@ describe('Client', function () {
 
       bitbucketClient2.put('repos')
         .then(function () {
-          assert.equal(requestPost.getCall(0).args[ 0 ].uri,
+          assert.equal(requestPost.getCall(0).args[0].uri,
             'http://localhost/repos');
 
-          assert.equal(requestPost.getCall(0).args[ 0 ].oauth,
+          assert.equal(requestPost.getCall(0).args[0].oauth,
             oauth);
 
           done();
@@ -244,4 +244,3 @@ describe('Client', function () {
     });
   });
 });
-

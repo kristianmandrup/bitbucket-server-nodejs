@@ -1,6 +1,6 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var BitbucketClient = require('../../index.js').Client;
+var BitbucketClient = require('../../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 
@@ -31,10 +31,10 @@ describe('Hooks', function () {
     bitbucketClient.hooks.enable('projectKey', 'repoSlug', 'hookKey', hookDetails)
       .then(function (hooks) {
         assert.equal(
-          requestPost.getCall(0).args[ 0 ].uri,
+          requestPost.getCall(0).args[0].uri,
           'http://localhost/projects/projectKey/repos/repoSlug/settings/hooks/hookKey/enabled'
         );
-        assert.equal(requestPost.getCall(0).args[ 0 ].body, hookDetails);
+        assert.equal(requestPost.getCall(0).args[0].body, hookDetails);
 
         done();
       });

@@ -1,6 +1,6 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var BitbucketClient = require('../../index.js').Client;
+var BitbucketClient = require('../../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 
@@ -29,15 +29,15 @@ describe('Pull Requests', function () {
     bitbucketClient.prs.get('PRJ', 'my-repo')
       .then(function (prs) {
         assert.equal(prs.size, 1);
-        assert.deepEqual(prs.values[ 0 ], expected.values[ 0 ]);
+        assert.deepEqual(prs.values[0], expected.values[0]);
 
         assert.equal(
-          requestGet.getCall(0).args[ 0 ].uri,
+          requestGet.getCall(0).args[0].uri,
           'http://localhost/projects/PRJ/repos/my-repo/pull-requests?limit=1000&state=OPEN'
         );
 
         assert.equal(
-          requestGet.getCall(0).args[ 0 ].oauth,
+          requestGet.getCall(0).args[0].oauth,
           oauth
         );
 
@@ -46,9 +46,9 @@ describe('Pull Requests', function () {
       })
       .then(function (prs) {
         assert.equal(prs.size, 1);
-        assert.deepEqual(prs.values[ 0 ], expected.values[ 0 ]);
+        assert.deepEqual(prs.values[0], expected.values[0]);
         assert.equal(
-          requestGet.getCall(1).args[ 0 ].uri,
+          requestGet.getCall(1).args[0].uri,
           'http://localhost/projects/PRJ/repos/my-repo/pull-requests?limit=1000&state=OPEN'
         );
         done();
@@ -68,17 +68,17 @@ describe('Pull Requests', function () {
     // Test prs.get API.
     bitbucketClient.prs.getCombined()
       .then(function (prs) {
-        assert.deepEqual(prs.values[ 0 ], expectedPrs.values[ 0 ]);
+        assert.deepEqual(prs.values[0], expectedPrs.values[0]);
         assert.equal(
-          requestGet.getCall(0).args[ 0 ].uri,
+          requestGet.getCall(0).args[0].uri,
           'http://localhost/projects?limit=1000'
         );
         assert.equal(
-          requestGet.getCall(1).args[ 0 ].uri,
+          requestGet.getCall(1).args[0].uri,
           'http://localhost/projects/PRJ/repos?limit=1000'
         );
         assert.equal(
-          requestGet.getCall(2).args[ 0 ].uri,
+          requestGet.getCall(2).args[0].uri,
           'http://localhost/projects/PRJ/repos/my-repo/pull-requests?limit=1000&state=OPEN'
         );
         done();
@@ -96,9 +96,11 @@ describe('Pull Requests', function () {
     requestGet.onCall(2).returns(Promise.resolve(expectedPrs));
 
     // Test prs.get API.
-    bitbucketClient.prs.getCombined(null, null, { author: 'tom' })
+    bitbucketClient.prs.getCombined(null, null, {
+        author: 'tom'
+      })
       .then(function (prs) {
-        assert.deepEqual(prs.values[ 0 ], expectedPrs.values[ 0 ]);
+        assert.deepEqual(prs.values[0], expectedPrs.values[0]);
       })
       .then(function () {
         requestGet.onCall(3).returns(Promise.resolve(expectedProjects));
@@ -106,7 +108,9 @@ describe('Pull Requests', function () {
         requestGet.onCall(5).returns(Promise.resolve(expectedPrs));
 
         // Test prs.get API.
-        return bitbucketClient.prs.getCombined(null, null, { author: 'ben' });
+        return bitbucketClient.prs.getCombined(null, null, {
+          author: 'ben'
+        });
       })
       .then(function (prs) {
         assert.equal(prs.values.length, 0);
@@ -154,4 +158,3 @@ describe('Pull Requests', function () {
       });
   });
 });
-

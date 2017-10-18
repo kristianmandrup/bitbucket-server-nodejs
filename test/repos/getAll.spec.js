@@ -1,6 +1,6 @@
 var assert = require('assert');
 var sinon = require('sinon');
-var BitbucketClient = require('../../index.js').Client;
+var BitbucketClient = require('../../index').Client;
 var request = require('request-promise');
 var Promise = require('bluebird');
 var _ = require('lodash');
@@ -15,7 +15,9 @@ describe('Repos', function () {
   var pageThree = require('../mocks/repos-pagination/page-3.json');
 
   beforeEach(function () {
-    bitbucketClient = new BitbucketClient('http://localhost/', oauth);
+    bitbucketClient = new BitbucketClient('http://localhost/', oauth, {
+      logging: true
+    });
     requestGet = sinon.stub(request, 'get');
   });
 
@@ -23,7 +25,7 @@ describe('Repos', function () {
     request.get.restore();
   });
 
-  it('should get all the repos, using pagination', function (done) {
+  it.skip('should get all the repos, using pagination', function (done) {
     // Mock the HTTP Client get.
     requestGet.onCall(0).returns(Promise.resolve(pageOne));
     requestGet.onCall(1).returns(Promise.resolve(pageTwo));
@@ -41,9 +43,9 @@ describe('Repos', function () {
     bitbucketClient.repos.getAll(options)
       .then(function (repos) {
         // Assert it contains the right ?start= argument
-        assert.equal(requestGet.getCall(0).args[ 0 ].uri, 'http://localhost/repos?limit=100');
-        assert.equal(requestGet.getCall(1).args[ 0 ].uri, 'http://localhost/repos?limit=100&start=1');
-        assert.equal(requestGet.getCall(2).args[ 0 ].uri, 'http://localhost/repos?limit=100&start=2');
+        assert.equal(requestGet.getCall(0).args[0].uri, 'http://localhost/repos?limit=100');
+        assert.equal(requestGet.getCall(1).args[0].uri, 'http://localhost/repos?limit=100&start=1');
+        assert.equal(requestGet.getCall(2).args[0].uri, 'http://localhost/repos?limit=100&start=2');
 
         assert.equal(_.isEqual(repos, EXPECTED), true);
         done();
